@@ -1,0 +1,54 @@
+---
+title: "Licensing R packages with code and data: learnings from submitting to CRAN"
+date: 2025-01-20
+author:
+  - name: "Joshua Lambert"
+    orcid: "0000-0001-5218-3046"
+  - name: "Chris Hartgerink"
+    orcid: "0000-0003-1050-6809"
+categories: [R, open-source, package development, DOI]
+format:
+  html: 
+    toc: true
+# doi: "10.59350/z78kb-qrz59"
+---
+
+::: {.callout-note}
+This is a follow-up blog post to the [_Dual licensing R packages with code and data_](data-licensing.html) post published in September 2024. It contains learnings from submitting **epiparameter** to CRAN with a dual license.
+:::
+
+### Overview of previous blog post on R package licensing
+
+We previously published a [post on the Epiverse-TRACE blog discussing the importance of licensing code and data for open source](data-licensing.html). It covered the differences between open source licenses for code and those that are required for other forms of information, in our case, data. R packages most commonly distribute code, and therefore require an [appropriate open source license](https://cran.r-project.org/doc/FAQ/R-exts.html#Licensing). Less frequently, R packages are used to bundle and share data, so-called ["data packages"](https://r-pkgs.org/data.html), and require an applicable license for reuse and redistribution.
+
+We recommend reading the original blog post for a more in-depth explanation of each of these points.
+
+However, since publishing the original post, the last section, _Licensing code and data in one R package_, has become outdated given our experience submitting the epiparameter package to CRAN with a dual-license. This blog post provides an updated _Licensing code and data in one R package_ section with learnings from epiparameter package development and CRAN submission.
+
+### Licensing code and data in one R package
+
+If you are developing an R package that has both code and data as primary objects of (roughly) equal importance, a software license inadequately covers the data, and a data license inadequately covers the code. Dual licensing can help resolve this issue. This means there is one license for code (for example, [MIT license](https://mit-license.org))  and another license for the included data (for example, [Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt)).
+
+After conducting an online search, dual licensing for R packages seems rare. An interesting example of dual licensing is the [**igraphdata** package](https://github.com/igraph/igraphdata/blob/main/LICENSE), which contains several licenses: One for each dataset included in the package. Similar to igraphdata, we dual licensed the [**epiparameter** package](https://github.com/epiverse-trace/epiparameter), which until versus v0.4.0 contained both code and data. We [licensed the code using the `DESCRIPTION` file](https://github.com/epiverse-trace/epiparameter/blob/v0.3.0/DESCRIPTION#L28) and used [the `LICENSE` file](https://github.com/epiverse-trace/epiparameter/blob/v0.3.0/LICENSE) to license the data under CC0.  Concretely, we included this additional text  in `LICENSE` to clarify the dual license and that we recommend citing the original source regardless:
+
+> All data included in the epiparameter R package is licensed under CC0 (<https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt>). This includes the parameter database (extdata/parameters.json) and data in the data/ folder. Please cite the individual parameter entries in the database when used.
+
+However, upon submission of epiparameter to CRAN, we were rejected due to the dual licensing. The CRAN package reviewer stated:
+
+> A package can only be licensed as a whole. It can have a single license or a set of _alternative_ licenes. If the data have to be licensed differently then the code, you have to provide the data in a separate data package with the other license.
+
+Therefore, we decided to separate the data, originally stored in epiparameter, into a package called [**epiparameterDB**](https://github.com/epiverse-trace/epiparameterDB). This package is solely [licensed under CC0](https://github.com/epiverse-trace/epiparameterDB/blob/main/DESCRIPTION#L15), and epiparameter can then also be solely [licensed under MIT](https://github.com/epiverse-trace/epiparameter/blob/main/DESCRIPTION#L28). Both packages are now hosted on CRAN using a single license dedicated to code or data.
+
+::: {.callout-tip}
+It is often desirable to host an R package on CRAN as it enables it to be easily installed (from binary if on Mac or Windows), it gives the package some validity as a non-trivial and secure piece of software to install and use.
+
+It is not necessary nor beneficial for all R packages to be hosted on CRAN, and it does come with some drawbacks, such as the dual licensing restriction of code and data, but for our case with the epiparameter package, we deemed it better to host on CRAN and split the code and data into epiparameter and epiparameterDB, respectively.
+:::
+
+When including data in your R package from other sources it is important to check that the license of your package and the data is compatible[^1], or that the individual data license is clearly stated, as in igraphdata. For epiparameterDB, we consider model estimates as facts (that is, not copyrightable).
+
+---
+
+This blogpost provides an addendum to our original post [Dual licensing R packages with code and data](data-licensing.html), providing our experience and outcomes from submitting epiparameter -- and the resulting epiparmeterDB package -- to CRAN in a conformant manner. In addition to the requirements and benefits of open source licensing of open software and data in the first post, we hope this follow-up post provides practical information that will be of use to other R package developers, or software developers and open data curators more broadly.
+
+[^1]: See [this blog post by Julia Silge on including external data sets into an R package and rectifying incompatibilities with license](https://juliasilge.com/blog/sentiment-lexicons/)

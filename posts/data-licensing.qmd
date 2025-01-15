@@ -42,6 +42,12 @@ Data need licenses such as the Public Domain Dedication or the Creative Commons 
 
 ### Licensing code and data in one R package
 
+::: {.callout-warning}
+This section on dual licensing was first published in September 2024. Since publishing, the **epiparameter** package is no longer dual licensed due to CRAN requirements.
+
+Please [click here to see the updated version of the this section in a new post](data-licensing-cran.html), which updates the _Licensing code and data in one R package_ section in light of our experience dual licensing an R package and CRAN.
+:::
+
 But what to do if your R package has both code and data as primary objects of (roughly) equal importance?
 
 In these cases a software license inadequately covers the data, and a data license inadequately covers the code. Dual licensing can help resolve this issue. This means there is one license for code (for example, MIT license)  and another license for the included data (for example, Public Domain Dedication).

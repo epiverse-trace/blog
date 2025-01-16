@@ -1,0 +1,67 @@
+---
+title: "Outbreak analytics Pipelines"
+author:
+  - name: "Andree Valle-Campos"
+    orcid: "0000-0002-7779-481X"
+  - name: " Carmen Tamayo Cuartero"
+    orcid: "0000-0003-4184-2864"
+  - name: "Anna Carnegie"
+    orcid: "0000-0002-6385-7795"
+  - name: "Sebastian Funk"
+    orcid: "0000-0002-2842-3406"
+  - name: "Adam Kucharski"
+    orcid: "0000-0001-8814-9421"
+  - name: "Rosalind M Eggo"
+    orcid: "0000-0002-0362-6717"
+date: last-modified
+categories: [outbreak analytics, pipelines, tasks, packages]
+bibliography: pipelines.bib
+image: "sigmund-4CNNH2KEjhc-unsplash.jpg"
+format:
+  html: 
+    toc: true
+---
+
+## The Pipeline approach
+
+We can solve Outbreak Analytics *tasks* connecting multiple packages in *pipelines*.
+
+## Outbreak analytics
+
+*Outbreak analytics* is a specialized field within data science that focuses on the technological and methodological aspects of the outbreak data pipeline. This includes the systematic collection, analysis, modeling, and reporting of data to inform outbreak response [@polonsky2019outbreak].
+
+### Tasks
+
+We can view Outbreak analytics as a set of related data analysis __Tasks__. In @fig-tasks we represent this in a directed graph, where each *node* is a Task and each *directed edge* represents the flow of input and output data. Tasks are connected similarly to the [tidyverse](https://r4ds.hadley.nz/whole-game.html) diagram for exploratory data analysis.
+
+![Task for outbreak analytics](task_pipeline-minimal.svg){#fig-tasks fig-alt="Directed graph where tasks are nodes and data flows are directed edges like arrows. One task connect with multiple other tasks."}
+
+In @fig-tasks-detailed we have a summarized detail of data inputs and outputs between Tasks. For example, for the first task on the left called *Read case data* we need a data input called *Case data* to get two data outputs called *Linelist* and *Contact data*.
+
+![Detailed task paths](task_pipeline-detailed.svg){#fig-tasks-detailed}
+
+One Task can contain different methods and packages for similar data inputs and outputs.
+
+### Pipelines
+
+We defined a __Pipeline__ as a set of connected Tasks required to obtain an informative outcome for decision-making purposes.
+
+For example, to quantify the time-varying reproduction number we can follow the *Transmissibility pipeline* (@fig-pipe-01). First, we *Read case data* to generate a linelist. Then, we *Describe case data*, using the linelist as inputs to generate delay distributions and epicurves. Finally, we use both outputs as inputs to *Quantify transmission* and generate an estimate of transmission. This output allows us to determine the intensity of interventions needed to achieve epidemic control [@cori2017key].
+
+![Transmissibility pipeline](task_pipeline-pipe_01.svg){#fig-pipe-01}
+
+Similarly, to simulate the final size of an epidemic we can follow the *Scenarios pipeline* (@fig-pipe-02). First, we *Read population data* to obtain its demographic distribution and social contact matrix. Next, we collect the estimate of transmission data output, ideally from the *Transmissibility pipeline*. Finally, we use these three data as inputs to *Simulate transmission scenarios* and determine the proportion of the population infected. This output allows us to assess the long-term impact of the outbreak and evaluate intervention choices [@cori2017key].
+
+![Scenarios pipelines](task_pipeline-pipe_02.svg){#fig-pipe-02}
+
+## How we use the Pipelines?
+
+We use the Pipeline approach to connect multiple packages in the design of:
+
+- Reproducible report templates per Pipeline stored in the [`{episoap}`](https://epiverse-trace.github.io/episoap/) package,
+- Code scripts stored in the [`{howto}`](https://epiverse-trace.github.io/howto/) repository, and
+- [New](https://github.com/orgs/epiverse-trace/discussions/87) packages in relation to other upstream packages and tasks.
+
+## Attributions
+
+- The image of this feed is from [Unsplash](https://unsplash.com/photos/4CNNH2KEjhc), provided by [Sigmund](https://unsplash.com/@sigmund), free to use under the [Unsplash License](https://unsplash.com/license).
